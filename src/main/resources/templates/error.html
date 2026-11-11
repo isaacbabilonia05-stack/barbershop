@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error | BarberShop</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+    <div class="login-card">
+        <!-- 'codigo' lo manda GlobalExceptionHandler; 'status' lo manda Spring Boot en /error -->
+        <div class="error-code" th:text="${codigo} ?: ${status}">500</div>
+        <span class="brand-sub" th:text="${titulo} ?: 'Algo salio mal'">Algo salio mal</span>
+        <hr class="divider">
+        <p style="color:#aaa; font-size:0.9rem; line-height:1.6;"
+           th:text="${mensaje} ?: 'No pudimos completar tu solicitud.'">Mensaje</p>
+        <a th:href="@{/login}" class="btn-nuevo">← Volver al inicio</a>
+    </div>
+</body>
+</html>

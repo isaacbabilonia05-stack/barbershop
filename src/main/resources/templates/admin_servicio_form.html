@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Servicio | Admin</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+    <div class="login-card">
+        <div class="brand-logo" th:text="${servicio.id == null} ? '+ SERVICIO' : '✎ SERVICIO'">SERVICIO</div>
+        <span class="brand-sub" th:text="${servicio.id == null} ? 'Nuevo servicio' : 'Editar servicio'"></span>
+        <hr class="divider">
+        <div th:replace="~{fragments :: mensajes}"></div>
+
+        <form th:action="@{/admin/servicios/guardar}" method="post">
+            <input type="hidden" name="id" th:value="${servicio.id}" th:if="${servicio.id != null}">
+            <div class="input-group-custom">
+                <label>Nombre</label>
+                <input type="text" name="nombre" class="form-control" th:value="${servicio.nombre}" required>
+            </div>
+            <div class="input-group-custom">
+                <label>Descripción</label>
+                <input type="text" name="descripcion" class="form-control" th:value="${servicio.descripcion}">
+            </div>
+            <div class="input-group-custom">
+                <label>Tipo</label>
+                <select name="tipo" class="form-control" required>
+                    <option th:each="t : ${tipos}" th:value="${t}" th:text="${t}" th:selected="${t == servicio.tipo}"></option>
+                </select>
+            </div>
+            <div class="input-group-custom">
+                <label>Precio</label>
+                <input type="number" name="precio" class="form-control" step="500" min="1" th:value="${servicio.precio}" required>
+            </div>
+            <div class="input-group-custom">
+                <label>Duración (minutos)</label>
+                <input type="number" name="duracionMinutos" class="form-control" step="5" min="5" max="480" th:value="${servicio.duracionMinutos}" required>
+            </div>
+            <button type="submit" class="btn-login">Guardar</button>
+        </form>
+        <a th:href="@{/admin/servicios}" class="back-link" style="display:block; margin-top:20px;">← Volver a servicios</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cubículo | Admin</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+    <div class="login-card">
+        <div class="brand-logo" th:text="${cubiculo.id == null} ? '+ CUBÍCULO' : '✎ CUBÍCULO'">CUBÍCULO</div>
+        <span class="brand-sub" th:text="${cubiculo.id == null} ? 'Nuevo cubículo' : 'Editar cubículo'"></span>
+        <hr class="divider">
+        <div th:replace="~{fragments :: mensajes}"></div>
+
+        <form th:action="@{/admin/cubiculos/guardar}" method="post">
+            <input type="hidden" name="id" th:value="${cubiculo.id}" th:if="${cubiculo.id != null}">
+            <div class="input-group-custom">
+                <label>Nombre</label>
+                <input type="text" name="nombre" class="form-control" th:value="${cubiculo.nombre}" required>
+            </div>
+            <div class="input-group-custom">
+                <label>Ubicación</label>
+                <input type="text" name="ubicacion" class="form-control" th:value="${cubiculo.ubicacion}">
+            </div>
+            <div class="check-row">
+                <input type="checkbox" id="disponible" name="disponible" value="true" th:checked="${cubiculo.disponible == null or cubiculo.disponible}">
+                <label for="disponible">Disponible</label>
+            </div>
+            <button type="submit" class="btn-login">Guardar</button>
+        </form>
+        <a th:href="@{/admin/cubiculos}" class="back-link" style="display:block; margin-top:20px;">← Volver a cubículos</a>
+    </div>
+</body>
+</html>

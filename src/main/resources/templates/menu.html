@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu | BarberShop</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <style>
+        .menu-servicios-grid {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .menu-servicio-card {
+            background: #0e0e0e;
+            border: 1px solid #2a2a2a;
+            border-top: 3px solid #d4af37;
+            border-radius: 12px;
+            padding: 28px 22px;
+            width: 260px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .menu-servicio-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 0 30px rgba(212,175,55,0.2);
+            border-color: #d4af37;
+        }
+        .menu-servicio-icono { font-size: 2.4rem; }
+        .menu-servicio-titulo {
+            color: #d4af37;
+            font-size: 1rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        .menu-servicio-desc {
+            color: #888;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            margin: 0;
+            flex: 1;
+        }
+        .menu-servicio-precio {
+            color: #d4af37;
+            font-weight: 700;
+            font-size: 0.88rem;
+        }
+        .menu-btn-agendar {
+            background: linear-gradient(135deg, #d4af37, #b8960c);
+            color: #000;
+            font-weight: 700;
+            font-size: 0.72rem;
+            letter-spacing: 1.5px;
+            padding: 10px 22px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            margin-top: 4px;
+        }
+        .menu-btn-agendar:hover {
+            background: linear-gradient(135deg, #f0cc55, #d4af37);
+            box-shadow: 0 0 15px rgba(212,175,55,0.35);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card panel-wide">
+        <div class="menu-header">
+            <div class="brand-logo">✂ BARBERSHOP</div>
+            <span class="brand-sub">Bienvenido, <span th:text="${nombre}" style="color:#d4af37;"></span></span>
+            <div class="menu-nav">
+                <a th:href="@{/perfil}" class="btn-accion btn-editar">✎ Mi Perfil</a>
+                <a th:href="@{/miscitas}" class="btn-accion btn-editar">📅 Mis Citas</a>
+                <form th:replace="~{fragments :: logout}"></form>
+            </div>
+        </div>
+
+        <hr class="divider">
+        <h2 class="subtitle" style="font-size:0.9rem; margin-bottom:24px;">NUESTROS SERVICIOS</h2>
+
+        <div class="menu-servicios-grid">
+
+            <a href="/agendar" class="menu-servicio-card">
+                <div class="menu-servicio-icono">✂</div>
+                <h3 class="menu-servicio-titulo">Corte de Cabello</h3>
+                <p class="menu-servicio-desc">Cortes modernos y clásicos adaptados a tu estilo personal.</p>
+                <span class="menu-servicio-precio">Desde $15.000</span>
+                <span class="menu-btn-agendar">Agendar Cita</span>
+            </a>
+
+            <a href="/agendar" class="menu-servicio-card">
+                <div class="menu-servicio-icono">🪒</div>
+                <h3 class="menu-servicio-titulo">Barba y Afeitado</h3>
+                <p class="menu-servicio-desc">Perfilado, arreglo y afeitado profesional con navajas de calidad.</p>
+                <span class="menu-servicio-precio">Desde $10.000</span>
+                <span class="menu-btn-agendar">Agendar Cita</span>
+            </a>
+
+            <a href="/agendar" class="menu-servicio-card">
+                <div class="menu-servicio-icono">🎨</div>
+                <h3 class="menu-servicio-titulo">Tinte y Coloracion</h3>
+                <p class="menu-servicio-desc">Coloraciones naturales y fantasía con productos premium.</p>
+                <span class="menu-servicio-precio">Desde $35.000</span>
+                <span class="menu-btn-agendar">Agendar Cita</span>
+            </a>
+
+        </div>
+    </div>
+</body>
+</html>

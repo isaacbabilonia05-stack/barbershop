@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Citas Pendientes | BarberShop</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <style>
+        .btn-aceptar {
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-rechazar {
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-finalizar {
+            background: #3498db;
+            color: #fff;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .estado-pendiente { color: #f39c12; }
+        .estado-aceptada { color: #27ae60; }
+        .estado-completada { color: #3498db; }
+        .titulo-seccion {
+            color: #d4af37;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card panel-wide">
+        <h1 class="page-title">✂ CITAS PENDIENTES</h1>
+        <span class="subtitle" th:text="'Bienvenido, ' + ${nombre}"></span>
+        <hr class="divider">
+
+        <!-- Citas Pendientes -->
+        <h3 class="titulo-seccion">⏳ Por confirmar</h3>
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Servicios</th>
+                    <th>Total</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Cubículo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="c : ${citasPendientes}">
+                    <td th:text="${c.cliente.nombre}"></td>
+                    <td>
+                        <span th:each="d : ${c.detalles}">
+                            <span th:text="${d.servicio.nombre}"></span> x<span th:text="${d.cantidad}"></span><br>
+                        </span>
+                    </td>
+                    <td>$<span th:text="${c.total}"></span></td>
+                    <td th:text="${c.fecha}"></td>
+                    <td th:text="${#temporals.format(c.horaInicio, 'hh:mm a')}"></td>
+                    <td th:text="${c.cubiculo.nombre}"></td>
+                    <td>
+                        <form th:action="@{/cita/aceptar/{id}(id=${c.id})}" method="post" style="display:inline;">
+                            <button type="submit" class="btn-aceptar">✅ Aceptar</button>
+                        </form>
+                        <form th:action="@{/cita/rechazar/{id}(id=${c.id})}" method="post" style="display:inline;">
+                            <button type="submit" class="btn-rechazar">❌ Rechazar</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(citasPendientes)}">
+                    <td colspan="7" style="text-align:center;">No hay citas pendientes</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Citas Aceptadas -->
+        <h3 class="titulo-seccion">✅ Citas aceptadas</h3>
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Servicios</th>
+                    <th>Total</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Cubículo</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="c : ${citasAceptadas}">
+                    <td th:text="${c.cliente.nombre}"></td>
+                    <td>
+                        <span th:each="d : ${c.detalles}">
+                            <span th:text="${d.servicio.nombre}"></span> x<span th:text="${d.cantidad}"></span><br>
+                        </span>
+                    </td>
+                    <td>$<span th:text="${c.total}"></span></td>
+                    <td th:text="${c.fecha}"></td>
+                    <td th:text="${#temporals.format(c.horaInicio, 'hh:mm a')}"></td>
+                    <td th:text="${c.cubiculo.nombre}"></td>
+                    <td class="estado-aceptada" th:text="${c.estado}"></td>
+                    <td>
+                        <form th:action="@{/cita/finalizar/{id}(id=${c.id})}" method="post" style="display:inline;">
+                            <button type="submit" class="btn-finalizar" onclick="return confirm('¿Marcar esta cita como completada?')">✅ Finalizar</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(citasAceptadas)}">
+                    <td colspan="8" style="text-align:center;">No hay citas aceptadas</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div style="display:flex; gap:12px; margin-top:20px; justify-content:center;">
+            <a th:href="@{/barbero/horarios}" class="btn-accion btn-editar">🕐 Mis Horarios</a>
+            <form th:replace="~{fragments :: logout}"></form>
+        </div>
+    </div>
+</body>
+</html>

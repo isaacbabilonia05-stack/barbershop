@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Horarios | BarberShop</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+    <div class="login-card panel-wide">
+        <h1 class="page-title">🕐 MIS HORARIOS</h1>
+        <span class="subtitle">Barbero: <span th:text="${nombre}" style="color:#d4af37;"></span></span>
+        <div class="admin-nav">
+            <a th:href="@{/cita/pendientes}" class="btn-accion btn-editar">📋 Mis Citas</a>
+            <form th:replace="~{fragments :: logout}"></form>
+        </div>
+        <hr class="divider">
+        <div th:replace="~{fragments :: mensajes}"></div>
+
+        <table class="custom-table">
+            <thead><tr><th>Día</th><th>Apertura</th><th>Cierre</th><th>Acciones</th></tr></thead>
+            <tbody>
+                <tr th:if="${#lists.isEmpty(horarios)}">
+                    <td colspan="4" style="text-align:center; color:#d4af37; padding:30px;">
+                        Aún no tienes horarios. Por defecto se atiende de 08:00 a 19:00.
+                    </td>
+                </tr>
+                <tr th:each="h : ${horarios}">
+                    <td th:text="${dias[h.diaSemana]}"></td>
+                    <td th:text="${h.horaApertura}"></td>
+                    <td th:text="${h.horaCierre}"></td>
+                    <td>
+                        <form th:action="@{/barbero/horarios/eliminar/{id}(id=${h.id})}" method="post" class="inline"
+                              onsubmit="return confirm('¿Eliminar este horario?')">
+                            <button type="submit" class="btn-accion btn-eliminar">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr class="divider">
+        <h2 class="subtitle" style="font-size:0.8rem;">AGREGAR / ACTUALIZAR HORARIO DE UN DÍA</h2>
+        <form th:action="@{/barbero/horarios/guardar}" method="post" style="max-width:420px; margin:0 auto;">
+            <div class="input-group-custom">
+                <label>Día</label>
+                <select name="diaSemana" class="form-control" required>
+                    <option th:each="i : ${#numbers.sequence(1, 7)}" th:value="${i}" th:text="${dias[i]}"></option>
+                </select>
+            </div>
+            <div class="input-group-custom">
+                <label>Hora de apertura</label>
+                <input type="time" name="horaApertura" class="form-control" value="08:00" required>
+            </div>
+            <div class="input-group-custom">
+                <label>Hora de cierre</label>
+                <input type="time" name="horaCierre" class="form-control" value="19:00" required>
+            </div>
+            <button type="submit" class="btn-login">Guardar Horario</button>
+        </form>
+    </div>
+</body>
+</html>

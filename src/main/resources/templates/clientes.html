@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin | BarberShop</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+    <div class="login-card panel-wide">
+        <h1 class="page-title">✂ ADMIN</h1>
+        <span class="subtitle">Panel de administracion</span>
+        <div th:replace="~{fragments :: adminNav('clientes')}"></div>
+        <div th:replace="~{fragments :: mensajes}"></div>
+        <hr class="divider">
+        <p th:if="${param.creado}" class="msg-ok">Cliente creado</p>
+        <p th:if="${param.editado}" class="msg-ok">Cliente actualizado</p>
+        <p th:if="${param.eliminado}" class="msg-ok">Cliente eliminado</p>
+
+        <h2 class="subtitle" style="font-size:0.8rem;">CLIENTES REGISTRADOS</h2>
+
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Telefono</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${#lists.isEmpty(clientes)}">
+                    <td colspan="4" style="text-align:center; color:#d4af37; padding:30px;">
+                        📭 No hay clientes registrados aun.
+                    </td>
+                 </tr>
+                <tr th:each="c : ${clientes}" th:if="${not #lists.isEmpty(clientes)}">
+                    <td th:text="${c.nombre}"></td>
+                    <td th:text="${c.email}"></td>
+                    <td th:text="${c.telefono}"></td>
+                    <td>
+                        <a th:href="@{/clientes/editar/{id}(id=${c.id})}" class="btn-accion btn-editar">Editar</a>
+                        <form th:action="@{/clientes/eliminar/{id}(id=${c.id})}" method="post" class="inline"
+                              onsubmit="return confirm('¿Seguro que deseas eliminar este cliente?')">
+                            <button type="submit" class="btn-accion btn-eliminar">Eliminar</button>
+                        </form>
+                    </td>
+                 </tr>
+            </tbody>
+        </table>
+
+        <a th:href="@{/clientes/nuevo}" class="btn-nuevo">+ Registrar Nuevo Cliente</a>
+    </div>
+</body>
+</html>

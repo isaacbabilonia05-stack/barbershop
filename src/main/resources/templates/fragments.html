@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <!-- Boton de cerrar sesion: POST + token CSRF (th:action lo agrega solo) -->
+    <form th:fragment="logout" th:action="@{/logout}" method="post" class="inline">
+        <button type="submit" class="btn-accion btn-eliminar">⏻ Cerrar Sesion</button>
+    </form>
+
+    <!-- Navegacion del administrador -->
+    <div th:fragment="adminNav(activo)" class="admin-nav">
+        <a th:href="@{/clientes}" class="btn-accion btn-editar" th:classappend="${activo == 'clientes'} ? 'activo'">👤 Clientes</a>
+        <a th:href="@{/admin/barberos}" class="btn-accion btn-editar" th:classappend="${activo == 'barberos'} ? 'activo'">✂ Barberos</a>
+        <a th:href="@{/admin/servicios}" class="btn-accion btn-editar" th:classappend="${activo == 'servicios'} ? 'activo'">💈 Servicios</a>
+        <a th:href="@{/admin/cubiculos}" class="btn-accion btn-editar" th:classappend="${activo == 'cubiculos'} ? 'activo'">🪑 Cubiculos</a>
+        <a th:href="@{/admin/citas}" class="btn-accion btn-editar" th:classappend="${activo == 'citas'} ? 'activo'">📅 Citas</a>
+        <a th:href="@{/admin/estadisticas}" class="btn-accion btn-editar" th:classappend="${activo == 'estadisticas'} ? 'activo'">📊 Estadisticas</a>
+        <form th:replace="~{fragments :: logout}"></form>
+    </div>
+
+    <!-- Mensajes flash -->
+    <div th:fragment="mensajes">
+        <p th:if="${msg}" th:text="${msg}" class="msg-ok"></p>
+        <p th:if="${err}" th:text="${err}" class="msg-err"></p>
+        <p th:if="${error}" th:text="${error}" class="msg-err"></p>
+    </div>
+</body>
+</html>

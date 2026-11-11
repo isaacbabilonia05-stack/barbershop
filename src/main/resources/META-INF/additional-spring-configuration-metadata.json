@@ -1,0 +1,47 @@
+{
+  "properties": [
+    {
+      "name": "app.encriptar-passwords-existentes",
+      "type": "java.lang.Boolean",
+      "description": "Si es true, al arrancar la aplicacion se encriptan con BCrypt las contrasenas de clientes y barberos que todavia esten guardadas en texto plano.",
+      "defaultValue": false
+    },
+    {
+      "name": "app.admin.email",
+      "type": "java.lang.String",
+      "description": "Email del administrador inicial."
+    },
+    {
+      "name": "app.admin.password",
+      "type": "java.lang.String",
+      "description": "Contrasena del administrador inicial (se guarda con BCrypt)."
+    },
+    {
+      "name": "app.admin.nombre",
+      "type": "java.lang.String",
+      "description": "Nombre del administrador inicial."
+    },
+    {
+      "name": "app.jwt.secret",
+      "type": "java.lang.String",
+      "description": "Clave secreta para firmar los JWT (minimo 32 caracteres)."
+    },
+    {
+      "name": "app.jwt.expiracion-minutos",
+      "type": "java.lang.Long",
+      "description": "Vida del token JWT en minutos.",
+      "defaultValue": 15
+    },
+    {
+      "name": "app.seed-clientes-fake",
+      "type": "java.lang.Integer",
+      "description": "Cantidad de clientes fake a insertar al arrancar (para pruebas). Si no se define, no se inserta nada."
+    },
+    {
+      "name": "app.seed-clientes-fake.password",
+      "type": "java.lang.String",
+      "description": "Contrasena de todos los clientes fake (se guarda con BCrypt).",
+      "defaultValue": "Fake1234"
+    }
+  ]
+}

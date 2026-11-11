@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nuevo Cliente | Admin</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+    <div class="login-card">
+        <div class="brand-logo">+ CLIENTE</div>
+        <span class="brand-sub">Registrar cliente</span>
+        <hr class="divider">
+        <div th:replace="~{fragments :: mensajes}"></div>
+
+        <form th:action="@{/clientes/nuevo}" method="post">
+            <div class="input-group-custom">
+                <label>Nombre</label>
+                <input type="text" name="nombre" class="form-control" th:value="${cliente.nombre}" required>
+            </div>
+            <div class="input-group-custom">
+                <label>Email</label>
+                <input type="email" name="email" class="form-control" th:value="${cliente.email}" required>
+            </div>
+            <div class="input-group-custom">
+                <label>Teléfono</label>
+                <input type="tel" name="telefono" class="form-control" th:value="${cliente.telefono}" required>
+            </div>
+            <div class="input-group-custom">
+                <label>Contraseña (mín. 8 caracteres)</label>
+                <input type="password" name="password" class="form-control" minlength="8" required>
+            </div>
+            <button type="submit" class="btn-login">Crear Cliente</button>
+        </form>
+        <a th:href="@{/clientes}" class="back-link" style="display:block; margin-top:20px;">← Volver a clientes</a>
+    </div>
+</body>
+</html>

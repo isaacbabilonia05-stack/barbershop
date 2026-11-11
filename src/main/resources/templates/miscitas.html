@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Citas | BarberShop</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <style>
+        .estado-pendiente { color: #f39c12; }
+        .estado-aceptada { color: #27ae60; }
+        .estado-rechazada { color: #e74c3c; }
+        .estado-cancelada { color: #e74c3c; }
+        .estado-completada { color: #3498db; }
+        .total-cita {
+            color: #d4af37;
+            font-weight: bold;
+        }
+        .servicio-item {
+            font-size: 0.75rem;
+            line-height: 1.4;
+        }
+        .btn-cancelar {
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+            background: transparent;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+            margin: 2px;
+        }
+        .btn-cancelar:hover {
+            background: #e74c3c;
+            color: #fff;
+        }
+        .mensaje-exito {
+            background: rgba(39, 174, 96, 0.2);
+            border: 1px solid #27ae60;
+            color: #27ae60;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .calificado-text {
+            color: #27ae60;
+            font-size: 0.7rem;
+        }
+        .btn-calificar {
+            border: 1px solid #d4af37;
+            color: #d4af37;
+            background: transparent;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+            margin: 2px;
+        }
+        .btn-calificar:hover {
+            background: #d4af37;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card panel-wide">
+        <h1 class="page-title">📅 MIS CITAS</h1>
+        <span class="subtitle">Citas agendadas</span>
+        <hr class="divider">
+
+        <div th:if="${param.cancelada}" class="mensaje-exito">
+            ✅ Cita cancelada exitosamente
+        </div>
+
+        <div th:if="${param.calificada}" class="mensaje-exito">
+            ⭐ ¡Gracias por calificar tu servicio!
+        </div>
+
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Servicios</th>
+                    <th>Total</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Barbero</th>
+                    <th>Cubículo</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="cita : ${citas}" th:if="${cita != null}">
+                    <td>
+                        <div th:each="detalle : ${cita.detalles}" class="servicio-item">
+                            <span th:text="${detalle.servicio.nombre}"></span> 
+                            x<span th:text="${detalle.cantidad}"></span>
+                            <span style="color:#d4af37;">$<span th:text="${detalle.subtotal}"></span></span>
+                        </div>
+                        <div th:if="${cita.detalles == null or cita.detalles.isEmpty()}">
+                            <span style="color:#888;">Sin servicios</span>
+                        </div>
+                    </td>
+                    <td class="total-cita">$<span th:text="${cita.total}"></span></td>
+                    <td th:text="${cita.fecha}"></td>
+                    <td th:text="${#temporals.format(cita.horaInicio, 'hh:mm a')}"></td>
+                    <td th:text="${cita.barbero != null ? cita.barbero.nombre : 'N/A'}"></td>
+                    <td th:text="${cita.cubiculo != null ? cita.cubiculo.nombre : 'N/A'}"></td>
+                    <td>
+                        <span th:classappend="'estado-' + ${#strings.toLowerCase(cita.estado.name())}" th:text="${cita.estado}"></span>
+                    </td>
+                    <td>
+                        <!-- Botón Calificar -->
+                        <a th:href="@{/calificarCita/{id}(id=${cita.id})}" 
+                           th:if="${cita.estado != null and cita.estado.name() == 'COMPLETADA' and cita.calificacion == null}"
+                           class="btn-calificar">⭐ Calificar</a>
+                        
+                        <!-- Botón Cancelar -->
+                        <form th:action="@{/cancelarCita/{id}(id=${cita.id})}" method="post" class="inline"
+                              th:if="${cita.estado != null and (cita.estado.name() == 'PENDIENTE' or cita.estado.name() == 'ACEPTADA')}"
+                              onsubmit="return confirm('¿Seguro que deseas cancelar esta cita?')">
+                            <button type="submit" class="btn-cancelar">Cancelar</button>
+                        </form>
+                        
+                        <!-- Ya calificado -->
+                        <span th:if="${cita.estado != null and cita.estado.name() == 'COMPLETADA' and cita.calificacion != null}" 
+                              class="calificado-text">
+                            ⭐ Calificado (<span th:text="${cita.calificacion}"></span>/5)
+                        </span>
+                    </td>
+                </tr>
+                <tr th:if="${citas == null or citas.isEmpty()}">
+                    <td colspan="8" style="text-align:center; color:#d4af37; padding:30px;">
+                        📭 No tienes citas agendadas aun.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="display:flex; gap:12px; margin-top:20px; justify-content:center;">
+            <a th:href="@{/menu}" class="btn-nuevo">← Volver al menu</a>
+            <a th:href="@{/perfil}" class="btn-accion btn-editar" style="padding:10px 20px;">✎ Mi Perfil</a>
+        </div>
+    </div>
+</body>
+</html>

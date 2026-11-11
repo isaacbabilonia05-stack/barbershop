@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cita Confirmada | BarberShop</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <style>
+        .check-anim { font-size:4rem; animation: pop 0.5s ease; }
+        @keyframes pop {
+            0% { transform:scale(0); opacity:0; }
+            80% { transform:scale(1.2); }
+            100% { transform:scale(1); opacity:1; }
+        }
+        .confirmacion-box {
+            background:rgba(212,175,55,0.05);
+            border:1px solid #d4af37;
+            border-radius:12px;
+            padding:20px;
+            margin:20px 0;
+            text-align:left;
+        }
+        .confirmacion-row {
+            display:flex;
+            justify-content:space-between;
+            padding:8px 0;
+            border-bottom:1px solid #2a2a2a;
+            font-size:0.85rem;
+        }
+        .confirmacion-row:last-child { border-bottom:none; }
+        .confirmacion-label { color:#888; }
+        .confirmacion-valor { color:#d4af37; font-weight:600; }
+        .total-final {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #d4af37;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card" style="max-width:500px;">
+        <div class="check-anim">✅</div>
+        <div class="brand-logo" style="font-size:2rem; margin-top:10px;">CITA CONFIRMADA</div>
+        <span class="brand-sub">Tu cita ha sido agendada</span>
+
+        <div class="confirmacion-box">
+            <div class="confirmacion-row">
+                <span class="confirmacion-label">Cliente</span>
+                <span class="confirmacion-valor" th:text="${nombre}"></span>
+            </div>
+            <div class="confirmacion-row">
+                <span class="confirmacion-label">Fecha</span>
+                <span class="confirmacion-valor" th:text="${cita.fecha}"></span>
+            </div>
+            <div class="confirmacion-row">
+                <span class="confirmacion-label">Hora</span>
+                <span class="confirmacion-valor" th:text="${#temporals.format(cita.horaInicio, 'hh:mm a')}"></span>
+            </div>
+            <div class="confirmacion-row">
+                <span class="confirmacion-label">Barbero</span>
+                <span class="confirmacion-valor" th:text="${cita.barbero.nombre}"></span>
+            </div>
+            <div class="confirmacion-row">
+                <span class="confirmacion-label">Cubículo</span>
+                <span class="confirmacion-valor" th:text="${cita.cubiculo.nombre}"></span>
+            </div>
+            <div class="confirmacion-row">
+                <span class="confirmacion-label">Total</span>
+                <span class="confirmacion-valor total-final">$ <span th:text="${total}"></span> COP</span>
+            </div>
+            <div class="confirmacion-row">
+                <span class="confirmacion-label">Estado</span>
+                <span class="confirmacion-valor" th:text="${cita.estado}"></span>
+            </div>
+        </div>
+
+        <a th:href="@{/miscitas}" class="btn-login" style="display:block; text-decoration:none; margin-bottom:10px; text-align:center;">
+            📅 Ver mis citas
+        </a>
+        <a th:href="@{/menu}" class="back-link">← Volver al menu</a>
+    </div>
+</body>
+</html>

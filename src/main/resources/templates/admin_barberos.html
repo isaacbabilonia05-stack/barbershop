@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Barberos | Admin</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+    <div class="login-card panel-wide">
+        <h1 class="page-title">✂ BARBEROS</h1>
+        <span class="subtitle">Panel de administracion</span>
+        <div th:replace="~{fragments :: adminNav('barberos')}"></div>
+        <hr class="divider">
+        <div th:replace="~{fragments :: mensajes}"></div>
+
+        <table class="custom-table">
+            <thead><tr><th>Nombre</th><th>Especialidad</th><th>Email</th><th>Teléfono</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody>
+                <tr th:if="${#lists.isEmpty(barberos)}">
+                    <td colspan="6" style="text-align:center; color:#d4af37; padding:30px;">📭 No hay barberos registrados.</td>
+                </tr>
+                <tr th:each="b : ${barberos}">
+                    <td th:text="${b.nombre}"></td>
+                    <td th:text="${b.especialidad}"></td>
+                    <td th:text="${b.email}"></td>
+                    <td th:text="${b.telefono}"></td>
+                    <td th:text="${b.activo} ? 'Activo' : 'Inactivo'" th:style="${b.activo} ? 'color:#27ae60' : 'color:#e74c3c'"></td>
+                    <td>
+                        <a th:href="@{/admin/barberos/editar/{id}(id=${b.id})}" class="btn-accion btn-editar">Editar</a>
+                        <form th:action="@{/admin/barberos/eliminar/{id}(id=${b.id})}" method="post" class="inline"
+                              onsubmit="return confirm('¿Eliminar este barbero?')">
+                            <button type="submit" class="btn-accion btn-eliminar">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <a th:href="@{/admin/barberos/nuevo}" class="btn-nuevo">+ Nuevo Barbero</a>
+    </div>
+</body>
+</html>

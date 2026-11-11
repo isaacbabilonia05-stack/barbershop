@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Barbero | Admin</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+    <div class="login-card">
+        <div class="brand-logo" th:text="${barbero.id == null} ? '+ BARBERO' : '✎ BARBERO'">BARBERO</div>
+        <span class="brand-sub" th:text="${barbero.id == null} ? 'Nuevo barbero' : 'Editar barbero'"></span>
+        <hr class="divider">
+        <div th:replace="~{fragments :: mensajes}"></div>
+
+        <form th:action="@{/admin/barberos/guardar}" method="post">
+            <input type="hidden" name="id" th:value="${barbero.id}" th:if="${barbero.id != null}">
+            <div class="input-group-custom">
+                <label>Nombre</label>
+                <input type="text" name="nombre" class="form-control" th:value="${barbero.nombre}" required>
+            </div>
+            <div class="input-group-custom">
+                <label>Especialidad</label>
+                <input type="text" name="especialidad" class="form-control" th:value="${barbero.especialidad}">
+            </div>
+            <div class="input-group-custom">
+                <label>Teléfono</label>
+                <input type="tel" name="telefono" class="form-control" th:value="${barbero.telefono}" required>
+            </div>
+            <div class="input-group-custom">
+                <label>Email (usuario de login)</label>
+                <input type="email" name="email" class="form-control" th:value="${barbero.email}" required>
+            </div>
+            <div class="input-group-custom">
+                <label th:text="${barbero.id == null} ? 'Contraseña (mín. 8 caracteres)' : 'Nueva contraseña (vacío = no cambiar)'">Contraseña</label>
+                <input type="password" name="password" class="form-control" minlength="8" th:required="${barbero.id == null}">
+            </div>
+            <div class="input-group-custom">
+                <label>Imagen (nombre de archivo o URL)</label>
+                <input type="text" name="imagenUrl" class="form-control" th:value="${barbero.imagenUrl}">
+            </div>
+            <div class="check-row">
+                <input type="checkbox" id="activo" name="activo" value="true" th:checked="${barbero.activo == null or barbero.activo}">
+                <label for="activo">Activo (aparece al agendar)</label>
+            </div>
+            <button type="submit" class="btn-login">Guardar</button>
+        </form>
+        <a th:href="@{/admin/barberos}" class="back-link" style="display:block; margin-top:20px;">← Volver a barberos</a>
+    </div>
+</body>
+</html>

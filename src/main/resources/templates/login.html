@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | BarberShop</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+    <div class="login-card">
+        <div class="brand-logo">✂ BARBER</div>
+        <span class="brand-sub">Panel de Gestion Profesional</span>
+        <hr class="divider">
+
+        <p th:if="${param.error}" class="msg-err">Email o contraseña incorrectos</p>
+        <p th:if="${param.inactivo}" class="msg-err">Tu cuenta está inactiva. Contacta al administrador.</p>
+        <p th:if="${param.expirado}" class="msg-info">Tu sesión expiró. Inicia sesión de nuevo.</p>
+        <p th:if="${param.logout}" class="msg-ok">Cerraste sesión correctamente.</p>
+        <p th:if="${param.oauth_error}" class="msg-err">No se pudo iniciar sesión con Google. Intenta de nuevo.</p>
+        <p th:if="${param.registrado}" class="msg-ok">¡Registro exitoso! Ya puedes iniciar sesión.</p>
+
+        <form th:action="@{/login}" method="post">
+            <div class="input-group-custom">
+                <label>Email</label>
+                <input type="email" name="username" class="form-control" placeholder="tu@email.com" required>
+            </div>
+            <div class="input-group-custom" style="position: relative;">
+                <label>Contraseña</label>
+                <input type="password" name="password" id="password" class="form-control" placeholder="********" required>
+            </div>
+            <button type="submit" class="btn-login">Acceder</button>
+        </form>
+
+        <p style="margin:18px 0 10px; font-size:0.8rem; color:#888;">— o —</p>
+        <a th:href="@{/oauth2/authorization/google}" class="btn-login"
+           style="display:block; text-align:center; text-decoration:none; box-sizing:border-box;">
+            Continuar con Google
+        </a>
+
+        <p style="margin-top:20px; font-size:0.8rem; color:#555;">
+            ¿No tienes cuenta?
+            <a th:href="@{/registro}" class="link-gold-bright">Registrate</a>
+        </p>
+    </div>
+
+    <script>
+        // Mostrar/ocultar contraseña
+        const passwordInput = document.getElementById('password');
+        
+        if (passwordInput) {
+            const togglePassword = document.createElement('span');
+            togglePassword.innerHTML = '👁️';
+            togglePassword.style.cursor = 'pointer';
+            togglePassword.style.position = 'absolute';
+            togglePassword.style.right = '20px';
+            togglePassword.style.bottom = '12px';
+            togglePassword.style.color = '#888';
+            togglePassword.style.fontSize = '1.2rem';
+            
+            const passwordContainer = passwordInput.parentElement;
+            passwordContainer.style.position = 'relative';
+            passwordContainer.appendChild(togglePassword);
+            
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.innerHTML = type === 'password' ? '👁️' : '🙈';
+            });
+        }
+    </script>
+</body>
+</html>

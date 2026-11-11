@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro | BarberShop</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <style>
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.7rem;
+            margin-top: 5px;
+            display: block;
+        }
+        .input-error {
+            border-color: #e74c3c !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="brand-logo">✂ REGISTRO</div>
+        <span class="brand-sub">Nuevo Cliente</span>
+        <hr class="divider">
+
+        <p th:if="${error}" th:text="${error}"
+           style="color:#e74c3c; font-size:0.8rem; margin-bottom:10px;
+                  background:rgba(231,76,60,0.1); padding:8px; border-radius:6px;">
+        </p>
+
+        <form th:action="@{/registro}" method="post" id="registroForm">
+            <div class="input-group-custom">
+                <label>Nombre</label>
+                <input type="text" name="nombre" class="form-control" placeholder="Juan Perez" required>
+            </div>
+            <div class="input-group-custom">
+                <label>Email</label>
+                <input type="email" name="email" id="email" class="form-control" placeholder="correo@email.com" required>
+            </div>
+            <div class="input-group-custom">
+                <label>Teléfono</label>
+                <input type="tel" name="telefono" id="telefono" class="form-control" placeholder="3000000000" required>
+                <small style="color:#666; font-size:0.65rem;">10 dígitos, solo números</small>
+            </div>
+            <div class="input-group-custom">
+                <label>Contraseña</label>
+                <input type="password" name="password" id="password" class="form-control" placeholder="********" required>
+                <small style="color:#666; font-size:0.65rem;">Mínimo 6 caracteres</small>
+            </div>
+            <button type="submit" id="submitBtn" class="btn-login">Registrarse</button>
+        </form>
+
+        <a th:href="@{/login}" class="back-link" style="display:block; margin-top:20px;">← Ya tengo cuenta</a>
+    </div>
+
+    <script>
+        const emailInput = document.getElementById('email');
+        const telefonoInput = document.getElementById('telefono');
+        const passwordInput = document.getElementById('password');
+        const submitBtn = document.getElementById('submitBtn');
+        const form = document.getElementById('registroForm');
+
+        function validarEmail(email) {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
+
+        function validarTelefono(telefono) {
+            const regex = /^\d{10}$/;
+            return regex.test(telefono);
+        }
+
+        function validarPassword(password) {
+            return password.length >= 6;
+        }
+
+        function mostrarError(input, mensaje) {
+            let errorSpan = input.parentElement.querySelector('.error-message');
+            if (!errorSpan) {
+                errorSpan = document.createElement('span');
+                errorSpan.className = 'error-message';
+                input.parentElement.appendChild(errorSpan);
+            }
+            errorSpan.textContent = mensaje;
+            input.classList.add('input-error');
+        }
+
+        function limpiarError(input) {
+            const errorSpan = input.parentElement.querySelector('.error-message');
+            if (errorSpan) errorSpan.remove();
+            input.classList.remove('input-error');
+        }
+
+        emailInput.addEventListener('input', function() {
+            if (this.value.trim() === '') {
+                limpiarError(this);
+            } else if (!validarEmail(this.value)) {
+                mostrarError(this, '❌ Ingresa un email válido (ejemplo@correo.com)');
+            } else {
+                limpiarError(this);
+            }
+        });
+
+        telefonoInput.addEventListener('input', function() {
+            // Solo permitir números
+            this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
+            
+            if (this.value.trim() === '') {
+                limpiarError(this);
+            } else if (!validarTelefono(this.value)) {
+                mostrarError(this, '❌ El teléfono debe tener exactamente 10 dígitos');
+            } else {
+                limpiarError(this);
+            }
+        });
+
+        passwordInput.addEventListener('input', function() {
+            if (this.value.trim() === '') {
+                limpiarError(this);
+            } else if (!validarPassword(this.value)) {
+                mostrarError(this, '❌ La contraseña debe tener al menos 6 caracteres');
+            } else {
+                limpiarError(this);
+            }
+        });
+
+        form.addEventListener('submit', function(e) {
+            let valido = true;
+            
+            if (!validarEmail(emailInput.value)) {
+                mostrarError(emailInput, '❌ Email inválido');
+                valido = false;
+            }
+            
+            if (!validarTelefono(telefonoInput.value)) {
+                mostrarError(telefonoInput, '❌ Teléfono debe tener 10 dígitos');
+                valido = false;
+            }
+            
+            if (!validarPassword(passwordInput.value)) {
+                mostrarError(passwordInput, '❌ Contraseña debe tener al menos 6 caracteres');
+                valido = false;
+            }
+            
+            if (!valido) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>

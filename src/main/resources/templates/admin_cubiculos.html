@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cubículos | Admin</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+    <div class="login-card panel-wide">
+        <h1 class="page-title">🪑 CUBÍCULOS</h1>
+        <span class="subtitle">Panel de administracion</span>
+        <div th:replace="~{fragments :: adminNav('cubiculos')}"></div>
+        <hr class="divider">
+        <div th:replace="~{fragments :: mensajes}"></div>
+
+        <table class="custom-table">
+            <thead><tr><th>Nombre</th><th>Ubicación</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody>
+                <tr th:if="${#lists.isEmpty(cubiculos)}">
+                    <td colspan="4" style="text-align:center; color:#d4af37; padding:30px;">📭 No hay cubículos registrados.</td>
+                </tr>
+                <tr th:each="c : ${cubiculos}">
+                    <td th:text="${c.nombre}"></td>
+                    <td th:text="${c.ubicacion}"></td>
+                    <td th:text="${c.disponible} ? 'Disponible' : 'No disponible'" th:style="${c.disponible} ? 'color:#27ae60' : 'color:#e74c3c'"></td>
+                    <td>
+                        <a th:href="@{/admin/cubiculos/editar/{id}(id=${c.id})}" class="btn-accion btn-editar">Editar</a>
+                        <form th:action="@{/admin/cubiculos/eliminar/{id}(id=${c.id})}" method="post" class="inline"
+                              onsubmit="return confirm('¿Eliminar este cubículo?')">
+                            <button type="submit" class="btn-accion btn-eliminar">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <a th:href="@{/admin/cubiculos/nuevo}" class="btn-nuevo">+ Nuevo Cubículo</a>
+    </div>
+</body>
+</html>

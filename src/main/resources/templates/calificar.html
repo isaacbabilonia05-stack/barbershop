@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Calificar Servicio | BarberShop</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <style>
+        .stars {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .star {
+            font-size: 3rem;
+            cursor: pointer;
+            color: #555;
+            transition: all 0.2s;
+        }
+        .star.selected {
+            color: #f1c40f;
+            text-shadow: 0 0 10px rgba(241,196,15,0.5);
+        }
+        .star:hover {
+            transform: scale(1.1);
+        }
+        .rating-info {
+            text-align: center;
+            color: #888;
+            margin-bottom: 20px;
+        }
+        .info-row {
+            margin: 8px 0;
+        }
+        .info-label {
+            color: #d4af37;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card" style="max-width:500px;">
+        <div class="brand-logo">⭐ CALIFICAR</div>
+        <span class="brand-sub">¿Cómo fue tu experiencia?</span>
+        <hr class="divider">
+
+        <div class="rating-info">
+            <div class="info-row">
+                <span class="info-label">Barbero:</span> 
+                <strong th:text="${cita.barbero.nombre}"></strong>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Fecha:</span> 
+                <strong th:text="${cita.fecha}"></strong>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Hora:</span> 
+                <strong th:text="${#temporals.format(cita.horaInicio, 'hh:mm a')}"></strong>
+            </div>
+        </div>
+
+        <form th:action="@{/calificarCita/{id}(id=${cita.id})}" method="post" id="ratingForm">
+            <input type="hidden" name="calificacion" id="calificacion" required>
+            
+            <div class="stars">
+                <span class="star" data-value="1">★</span>
+                <span class="star" data-value="2">★</span>
+                <span class="star" data-value="3">★</span>
+                <span class="star" data-value="4">★</span>
+                <span class="star" data-value="5">★</span>
+            </div>
+            
+            <button type="submit" class="btn-login">Enviar Calificación</button>
+        </form>
+
+        <a th:href="@{/miscitas}" class="back-link" style="display:block; margin-top:20px;">← Volver a mis citas</a>
+    </div>
+
+    <script>
+        const stars = document.querySelectorAll('.star');
+        const input = document.getElementById('calificacion');
+        
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                const value = this.getAttribute('data-value');
+                input.value = value;
+                
+                stars.forEach(s => s.classList.remove('selected'));
+                for(let i = 0; i < value; i++) {
+                    stars[i].classList.add('selected');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

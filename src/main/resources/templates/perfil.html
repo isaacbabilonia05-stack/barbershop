@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Perfil | BarberShop</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+    <div class="login-card">
+        <div class="brand-logo">✎ PERFIL</div>
+        <span class="brand-sub">Mis datos personales</span>
+        <hr class="divider">
+
+        <p th:if="${error}" th:text="${error}"
+           style="color:#e74c3c; font-size:0.8rem; margin-bottom:10px;
+                  background:rgba(231,76,60,0.1); padding:8px; border-radius:6px;">
+        </p>
+
+        <div style="text-align:left; margin-bottom:20px;">
+            <p style="color:#888; font-size:0.75rem;">Nombre</p>
+            <p style="color:#fff; font-size:0.95rem;" th:text="${cliente.nombre}"></p>
+
+            <p style="color:#888; font-size:0.75rem; margin-top:14px;">Email</p>
+            <p style="color:#fff; font-size:0.95rem;" th:text="${cliente.email}"></p>
+
+            <p style="color:#888; font-size:0.75rem; margin-top:14px;">Teléfono</p>
+            <p style="color:#fff; font-size:0.95rem;" th:text="${cliente.telefono}"></p>
+        </div>
+
+        <hr class="divider">
+        <p style="color:#d4af37; font-size:0.75rem; margin-bottom:16px;">EDITAR DATOS</p>
+
+        <form th:action="@{/perfil}" method="post">
+            <div class="input-group-custom">
+                <label>Nombre</label>
+                <input type="text" name="nombre" class="form-control" th:value="${cliente.nombre}" required>
+            </div>
+            <div class="input-group-custom">
+                <label>Email</label>
+                <input type="email" name="email" class="form-control" th:value="${cliente.email}" required>
+            </div>
+            <div class="input-group-custom">
+                <label>Teléfono</label>
+                <input type="tel" name="telefono" class="form-control" th:value="${cliente.telefono}" required>
+            </div>
+            <div class="input-group-custom">
+                <label>Nueva Contraseña (dejar vacío para no cambiar)</label>
+                <input type="password" name="password" class="form-control" placeholder="Nueva contraseña">
+            </div>
+            <button type="submit" class="btn-login">Guardar Cambios</button>
+        </form>
+
+        <div style="display:flex; gap:12px; margin-top:20px; justify-content:center;">
+            <a th:href="@{/menu}" class="back-link">← Volver al menu</a>
+            <a th:href="@{/miscitas}" class="btn-accion btn-editar" style="padding:8px 16px;">📅 Mis Citas</a>
+        </div>
+    </div>
+</body>
+</html>

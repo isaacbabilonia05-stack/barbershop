@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Citas Admin | BarberShop</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <style>
+        .estado-pendiente { color: #f39c12; }
+        .estado-aceptada { color: #27ae60; }
+        .estado-rechazada { color: #e74c3c; }
+        .estado-cancelada { color: #e74c3c; }
+        .estado-completada { color: #3498db; }
+        .hora-am { color: #27ae60; }
+        .hora-pm { color: #e67e22; }
+        .servicio-item {
+            font-size: 0.75rem;
+            line-height: 1.4;
+        }
+        .total-row {
+            color: #d4af37;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card panel-wide">
+        <h1 class="page-title">📋 TODAS LAS CITAS</h1>
+        <span class="subtitle">Panel Administrador</span>
+        <div th:replace="~{fragments :: adminNav('citas')}"></div>
+        <div th:replace="~{fragments :: mensajes}"></div>
+        <hr class="divider">
+
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Servicios</th>
+                    <th>Total</th>
+                    <th>Fecha</th>
+                    <th>Hora Inicio</th>
+                    <th>Hora Fin</th>
+                    <th>Barbero</th>
+                    <th>Cubículo</th>
+                    <th>Estado</th>
+                    <th>Calificación</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="c : ${citas}" th:if="${not #lists.isEmpty(citas)}">
+                    <td th:text="${c.cliente.nombre}"></td>
+                    <td>
+                        <div th:each="d : ${c.detalles}" class="servicio-item">
+                            <span th:text="${d.servicio.nombre}"></span> x<span th:text="${d.cantidad}"></span>
+                            <span style="color:#d4af37;">$<span th:text="${d.subtotal}"></span></span>
+                        </div>
+                    </td>
+                    <td class="total-row">$<span th:text="${c.total}"></span></td>
+                    <td th:text="${c.fecha}"></td>
+                    <td>
+                        <span th:text="${#temporals.format(c.horaInicio, 'hh:mm a')}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${#temporals.format(c.horaFin, 'hh:mm a')}"></span>
+                    </td>
+                    <td th:text="${c.barbero.nombre}"></td>
+                    <td th:text="${c.cubiculo.nombre}"></td>
+                    <td>
+                        <span th:classappend="'estado-' + ${#strings.toLowerCase(c.estado)}" th:text="${c.estado}"></span>
+                    </td>
+                    <td>
+                        <span th:if="${c.calificacion != null}" class="calificacion">
+                            <span th:text="${c.calificacion}"></span> ⭐
+                        </span>
+                        <span th:if="${c.calificacion == null}">-</span>
+                    </td>
+                    <td>
+                        <form th:action="@{/admin/citas/eliminar/{id}(id=${c.id})}" method="post" class="inline"
+                              onsubmit="return confirm('¿Eliminar esta cita?')">
+                            <button type="submit" class="btn-accion btn-eliminar">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(citas)}">
+                    <td colspan="11" style="text-align:center; color:#d4af37; padding:30px;">
+                        📭 No hay citas agendadas aun.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="display:flex; gap:12px; margin-top:20px; justify-content:center;">
+            <a th:href="@{/clientes}" class="btn-nuevo">← Gestionar Clientes</a>
+            <a th:href="@{/admin/citas}" class="btn-accion btn-editar" style="padding:10px 20px;">🔄 Refrescar</a>
+        </div>
+    </div>
+</body>
+</html>
